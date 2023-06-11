@@ -20,13 +20,14 @@ function search(str) {
 			results = [];
 		}
 	})
+	// setting inputVal to user input and calling showSuggestions
 	let inputVal = str;
 	showSuggestions(results,inputVal)
 	return results;
 }
 
 function searchHandler(e) {
-	// TODO
+	// setting userinput to equal input that is entered in the text bar
 	let userInput = e.target.value;
 	search(userInput);
 	
@@ -34,37 +35,33 @@ function searchHandler(e) {
 
 function showSuggestions(results, inputVal) {
 
-	// TODO
+	// resetting the innerHTML each time this function is called upon
 	
 	suggestions.innerHTML = '';
+
+	// looping over each filtered fruit 
+
 	results.forEach(function(result){
 		 let li = document.createElement("li");
-		 let startIndex =  result.toLowerCase().indexOf(inputVal.toLowerCase())
-		 let endIndex = result.toLowerCase().lastIndexOf(inputVal.toLowerCase()[inputVal.length-1]);
-		 let beforeInput = result.slice(0,startIndex);
-		 if (inputVal.length === 1){
-			let afterInput = result.slice(startIndex + 1);
-			let atInput = result.slice(startIndex,startIndex+1)
-			let boldText = document.createElement('strong')
-			boldText.innerText = atInput;
-			li.innerHTML = beforeInput + "<strong>" + atInput + "</strong>" + afterInput;
-			suggestions.append(li);
-		 }
-		 else{
-			let afterInput = result.slice(endIndex + 1);
-			let atInput = result.slice(startIndex,endIndex +1)
-			let boldText = document.createElement('strong')
-			boldText.innerText = atInput;
-			li.innerHTML = beforeInput + "<strong>" + atInput + "</strong>" + afterInput;
-			suggestions.append(li);
-		 }
+		 
+		// creaeting a regular expression to replace each the text that matches 
+		// user input with bolded text
+
+		 let regex = new RegExp(inputVal, 'gi');
+		 let boldText = result.replace(regex, '<strong>$&</strong>');
+
+		 // appending the fruit with the bolded text to an li and appending that
+		 // li to our suggestions list
+
+		 li.innerHTML = boldText;
+		 suggestions.append(li);
 		 
 	});
 	
 }
 
 function useSuggestion(e) {
-	// TODO
+	// grabbing the text of the clicked li and replacing it with the input value
 	let autoFill = e.target.innerText;
 	input.value = autoFill;
 	suggestions.innerHTML = '';
